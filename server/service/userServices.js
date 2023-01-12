@@ -39,7 +39,7 @@ const userLogin = (userCreds, res)=>{
 			  const salt = await bcrypt.genSaltSync(10);
 			  const hashPassword = await bcrypt.hashSync(userData.password, salt);
 			  userData.password = hashPassword;
-			  logger.debug(userData);
+			  logger.debug(userData);z
 			  addUser(userData).then(data=>{
 				let payload = {
 				  "email" : data.email,
