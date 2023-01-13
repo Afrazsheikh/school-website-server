@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var util = require('util')
 const logger = require('./logger');
-const grid = require('gridfs-stream');
 const models = require('../models');
 require('dotenv').config()
 

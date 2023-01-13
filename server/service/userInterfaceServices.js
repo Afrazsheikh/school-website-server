@@ -1,26 +1,58 @@
 const logger = require('../../config/logger');
 const models = require('../../models');
-const moment = require('moment');
-const { param } = require('../routes/userServices.router');
 
 
-
-
-const addBanners = (banners) => {
+const addLogo = (id, logoFile) => {
     return new Promise(async (resolve, reject) => {
-        try {
-            logger.trace("inside add banners service",{banners});
-            let bann = await models.BannersAdd.insertMany(
-                [banners]
+        try 
+        {
+            logger.trace("inside add logo service",{id, logoFile});
+            let bann = await models.school.updateOne(
+                {_id: id},
+                {$set: {logoImage: logoFile}}
             );
-			
-            return resolve(bann[0]._id);
+            
+            return resolve("Image updated successfully");
         }
         catch (err) {
             logger.fatal(err);
-            if(err.code == 11000){
-                return reject({ code:422, message: "duplicate entry found" });
-			}
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+const getSections = (id, secType) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            logger.trace("inside get sections by id service");
+            let sections = await models.school.find(
+                {_id: _id},
+                secType
+            );
+
+            resolve(sections);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+        }
+    })
+}
+
+const addSection = (id, section, secData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            logger.trace("inside add banners service",{banners});
+            
+            let sec = await models.school.updateOne(
+                {_id: id},
+                {$push: {[section]: secData}}
+            );
+			
+            return resolve("Section added successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
             reject({ code:401, message: err.message });
 		}
 	})
@@ -68,32 +100,11 @@ const deleteBanner = (_id) => {
 }
 
 
-const getBanner = (_id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            logger.trace("inside get getBanner by id service");
-            let banner = await models.BannersAdd.findOne(
-                {_id},
-                {
-                    __v:0
-                }
-            );
-            resolve(BannersAdd);
-        }
-        catch (err) {
-            logger.fatal(err);
-            reject({ code:401, message: err.message });
-        }
-    })
-}
-
 
 module.exports  = {
-    addBanners,
+    addLogo,
+    getSections,
+    addSection,
     updateBanner,
-    deleteBanner,
-    getBanner
-
-
-
+    deleteBanner
 }

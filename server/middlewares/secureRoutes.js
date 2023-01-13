@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-const logger = require('../../config/logger')
-// let models = require('../../models')
+const logger = require('../../config/logger');
 
 module.exports = function checkToken(req, res, next) {
 	var token = req.headers['authorization'];
@@ -11,7 +10,7 @@ module.exports = function checkToken(req, res, next) {
 	if(token) 
 	{
 		token = req.headers['authorization'].slice(7);
-		jwt.verify(token, 'my_secret_key',async (err,decode) => {
+		jwt.verify(token, 'school73(*#$!@^&%vox',async (err,decode) => {
 			logger.info("JWT decode: " + JSON.stringify(decode));
 			if(err) 
 			{
