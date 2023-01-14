@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const school =new Schema ({
+    name: {type: String},
     logoImage: {type: String},
     address: {
         displayAddress: {type: String},
