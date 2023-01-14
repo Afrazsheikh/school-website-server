@@ -16,7 +16,7 @@ router.route('/addLogo').post(authorize, uploadLogo.single('file'), schoolContro
 // Sections
 router.route('/getSection').get(authorize, schoolController.getSections);
 router.route('/addSection').post(authorize, schoolController.addSection);
-router.route('/updateSection').put(authorize, schoolController.updateBanner);
+router.route('/updateSection').put(authorize, schoolController.updateSection);
 router.route('/deleteSection').delete(authorize, schoolController.deleteBanner);
 
 //Gallery

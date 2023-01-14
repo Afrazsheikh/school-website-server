@@ -44,8 +44,57 @@ const addSection = (req, res, next)=>{
         secData["title"] = req.body.title;
         secData["slideImg1"] = req.body.slide1;
     }
-  
-    userInterfaceService.addSection(req.payload.schoolId, section, secData).then(async (resp)=>{
+    else if(secType =="sec2")
+    {
+
+        section = "section2";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["bottomText1"] = req.body.bottomText1;
+        secData["bottomText2"] = req.body.bottomText2;
+        secData["bottomText3"] = req.body.bottomText3;
+
+    }
+    else if(secType =="sec3")
+    {
+        section = "section3";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["img1"] = req.body.img1;
+    }
+    else if(secType =="sec4")
+    {
+        section = "section4";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["img"] = req.body.img;
+
+
+    }
+    else if(secType =="sec5")
+    {
+        section = "section5";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["img"] = req.body.img;
+    }
+    else if(secType =="sec5")
+    {
+        section = "section5";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["img"] = req.body.img;
+    }
+    if(secType =="sec6")
+    {
+        section = "section6";
+        secData["id"] = req.body.secId;
+        secData["img"] = req.body.img;
+    }
+    addSection(req.payload.schoolId, section, secData).then(async (resp)=>{
         logger.info('After adding section....', resp);
         res.status(200).json({success: true, message: resp});
     })
@@ -54,6 +103,83 @@ const addSection = (req, res, next)=>{
         return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
+
+
+    
+const updateSection = (req, res, next)=>{
+    logger.trace("inside add updateSection  controller");
+    let secType = req.body.secType;
+    let secData = {}, section = "";
+
+    if(secType == "sec1") 
+    {
+        section = "section1";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["slideImg1"] = req.body.slide1;
+    }
+    else if(secType =="sec2")
+    {
+
+        section = "section2";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["bottomText1"] = req.body.bottomText1;
+        secData["bottomText2"] = req.body.bottomText2;
+        secData["bottomText3"] = req.body.bottomText3;
+
+    }
+    else if(secType =="sec3")
+    {
+        section = "section3";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["img1"] = req.body.img1;
+    }
+    else if(secType =="sec4")
+    {
+        section = "section4";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["description"] = req.body.description;
+        secData["img"] = req.body.img;
+
+
+    }
+    else if(secType =="sec5")
+    {
+        section = "section5";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["img"] = req.body.img;
+    }
+    else if(secType =="sec5")
+    {
+        section = "section5";
+        secData["id"] = req.body.secId;
+        secData["title"] = req.body.title;
+        secData["img"] = req.body.img;
+    }
+    if(secType =="sec6")
+    {
+        section = "section6";
+        secData["id"] = req.body.secId;
+        secData["img"] = req.body.img;
+    }
+  updateSection(req.payload.schoolId, section, secData).then(async (resp)=>{
+        logger.info('After adding section....', resp);
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+
+
 
 
 const updateBanner = (req, res) => {
@@ -188,7 +314,7 @@ module.exports = {
     addLogo,
     getSections,
     addSection,
-    updateBanner,
+    updateSection,
     deleteBanner,
 
     addGallery,

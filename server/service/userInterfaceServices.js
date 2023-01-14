@@ -42,9 +42,28 @@ const getSections = (id, secType) => {
 const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            logger.trace("inside add banners service",{banners});
+          
             
             let sec = await models.school.updateOne(
+                {_id: id},
+                {$push: {[section]: secData}}
+            );
+			
+            return resolve("Section added successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+		}
+	})
+}
+
+const updateSection = (id, section, secData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+          
+            
+            let sec = await models.school.findOneAndUpdate(
                 {_id: id},
                 {$push: {[section]: secData}}
             );
@@ -269,7 +288,7 @@ module.exports  = {
     addLogo,
     getSections,
     addSection,
-    updateBanner,
+    updateSection,
     deleteBanner,
 
     addGallery,
