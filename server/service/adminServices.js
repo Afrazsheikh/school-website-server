@@ -98,6 +98,15 @@ const addSection = (id, section, secData) => {
                 
                 return resolve("Section updated successfully");
             }
+            //section4
+            else if (section ==  "section4"){
+                let sec  =  await models.school.updateOne(
+                    {_id: id},
+                    {$push: {[section]: secData}}
+                );
+                return resolve("Slide added successfully");
+
+            }
             else {
                 return resolve("Section updated successfully");
             }
@@ -122,6 +131,16 @@ const updateSection = (id, section, secData) => {
                 );
                 
                 return resolve("Slide updated successfully");
+            }
+            else if(sectiom == 'section4'){
+                let sec = await models.school.findOneAndUpdate(
+                    {_id: id, "section4._id": secData.id},
+                    {$set: {"section4.$.title": secData.title}},
+                    {$set:  {"section4.$.description": secData.description}},
+                    {$set:  {"section4.$.img": secData.img}}
+                );
+                return resolve("Slide updated successfully");
+
             }
             else {
                 return resolve("Slide updated successfully");
@@ -227,6 +246,30 @@ const addSection3Img = (id, param, imgFile) => {
 		}
 	})
 }
+
+const addSection4Img = (id, param, imgFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add section4 img service",{id, param});
+            if(param == 'img') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section4.img": imgFile}}
+                );
+            }
+         
+            
+            return resolve("Image updated successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+
 
 
 
@@ -404,6 +447,7 @@ module.exports  = {
     deleteSlide,
     addSection2Img,
     addSection3Img,
+    addSection4Img,
 
     addGallery,
     getGallery,

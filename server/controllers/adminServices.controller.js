@@ -231,7 +231,18 @@ const addSection3Img = (req, res) => {
         res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
+//section 4
+const addSection4Img = (req, res) => {
+    logger.trace("inside add section 2 img controller");
 
+    adminService.addSection4Img(req.payload.schoolId, req.body.imgType, req.body.imgFile).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
 
 const addGallery = (req,res,next)=>{
     logger.trace("inside add addGallery  controller");
@@ -345,6 +356,7 @@ module.exports = {
     deleteSlide,
     addSection2Img,
     addSection3Img,
+    addSection4Img,
 
     addGallery,
     getGallery,
