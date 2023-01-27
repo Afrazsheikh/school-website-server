@@ -1,13 +1,13 @@
 const logger = require('../../config/logger');
 const models = require('../../models');
-
+const fs = require('fs');
 
 const addLogo = (id, logoFile) => {
     return new Promise(async (resolve, reject) => {
         try 
         {
             logger.trace("inside add logo service",{id, logoFile});
-            let bann = await models.school.updateOne(
+            await models.school.updateOne(
                 {_id: id},
                 {$set: {logoImage: logoFile}}
             );
@@ -21,12 +21,49 @@ const addLogo = (id, logoFile) => {
 	})
 }
 
+const getSettings = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            logger.trace("inside get settings by id service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {logoImage: 1, address: 1, email: 1, name: 1, phone: 1}
+            );
+
+            resolve(school);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+        }
+    })
+}
+
+const updateSettings = (id, params) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add logo service",{id, params});
+            await models.school.updateOne(
+                {_id: id},
+                {$set: params}
+            );
+            
+            return resolve("Settings updated successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
 const getSections = (id, secType) => {
     return new Promise(async (resolve, reject) => {
         try {
             logger.trace("inside get sections by id service");
-            let sections = await models.school.find(
-                {_id: _id},
+            let sections = await models.school.findOne(
+                {_id: id},
                 secType
             );
 
@@ -41,15 +78,30 @@ const getSections = (id, secType) => {
 
 const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
-        try {
-          
-            
-            let sec = await models.school.updateOne(
-                {_id: id},
-                {$push: {[section]: secData}}
-            );
-			
-            return resolve("Section added successfully");
+        try 
+        {
+            if(section == "section1")
+            {   
+                let sec = await models.school.updateOne(
+                    {_id: id},
+                    {$push: {[section]: secData}}
+                );
+                
+                return resolve("Slide added successfully");
+            }
+            else if(section == "section2" || "section3")
+            {
+                let sec = await models.school.updateOne(
+                    {_id: id},
+                    {$set: {[section]: secData}}
+                );
+                
+                return resolve("Section updated successfully");
+            }
+            else {
+                return resolve("Section updated successfully");
+            }
+
         }
         catch (err) {
             logger.fatal(err);
@@ -60,15 +112,21 @@ const addSection = (id, section, secData) => {
 
 const updateSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
-        try {
-          
+        try 
+        {
+            if(section == 'section1')
+            {
+                let sec = await models.school.findOneAndUpdate(
+                    {_id: id, "section1._id": secData.id},
+                    {$set: {"section1.$.title": secData.title}}
+                );
+                
+                return resolve("Slide updated successfully");
+            }
+            else {
+                return resolve("Slide updated successfully");
+            }
             
-            let sec = await models.school.findOneAndUpdate(
-                {_id: id},
-                {$push: {[section]: secData}}
-            );
-			
-            return resolve("Section added successfully");
         }
         catch (err) {
             logger.fatal(err);
@@ -77,45 +135,97 @@ const updateSection = (id, section, secData) => {
 	})
 }
 
-const updateBanner= (_id,bannerObj) => {
+const deleteSlide = (id, slideId) => {
     return new Promise(async (resolve, reject) => {
-        try {
-            logger.trace("inside update BannersAdd service");
-            let banner = await models.BannersAdd.findOneAndUpdate(
-                {_id},
-                bannerObj,
-                {returnOriginal: false}
-            );            
-            return resolve(banner);
+        try 
+        {
+            logger.trace("inside delete slide service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {section1: 1}
+            );     
+            
+            const index = school.section1.findIndex((sec) => sec._id == slideId);
+            if(index != -1) 
+            {
+                const deletedSlide = school.section1[index];
+                school.section1.splice(index, 1);
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {section1: school.section1}}
+                )
+                
+                fs.unlink(__dirname + '/../images/' + deletedSlide.slideImg1, (err) => {});
+                fs.unlink(__dirname + '/../images/' + deletedSlide.slideImg2, (err) => {});
+            }
+     
+            return resolve("Slide deleted successfully...");
         }
         catch (err) {
             logger.fatal(err);
-            if(err.code == 11000){
-                return reject({ code:422, message: "Banner name already exists!!!" });
-            }
             reject({ code:401, message: err.message });
         }
     })
 }
 
-const deleteBanner = (_id) => {
+const addSection2Img = (id, param, imgFile) => {
     return new Promise(async (resolve, reject) => {
-        try {
-            logger.trace("inside disable banner service");
-            let banner = await models.BannersAdd.deleteOne(
-                {_id},
-            );     
-            logger.debug(banner);
-            if(!banner.deletedCount){
-                return reject({code:422, message:"banner not found"});
-            }       
-            return resolve("banner deleted successfully...");
+        try 
+        {
+            logger.trace("inside add section2 img service",{id, param});
+            if(param == 'bottom1') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section2.bottomImage1": imgFile}}
+                );
+            }
+            else if(param == 'bottom2') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section2.bottomImage2": imgFile}}
+                );
+            }
+            else {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section2.bottomImage3": imgFile}}
+                );
+            }
+            
+            return resolve("Image updated successfully");
         }
         catch (err) {
             logger.fatal(err);
-            reject({ code:401, message: err.message });
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+const addSection3Img = (id, param, imgFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add section3 img service",{id, param});
+            if(param == 'img') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section3.img": imgFile}}
+                );
+            }
+            else {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section3.videoThumb": imgFile}}
+                );
+            }
+            
+            return resolve("Image updated successfully");
         }
-    })
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
 }
 
 
@@ -286,10 +396,14 @@ const deleteNews = (_id) => {
 
 module.exports  = {
     addLogo,
+    getSettings,
+    updateSettings,
     getSections,
     addSection,
     updateSection,
-    deleteBanner,
+    deleteSlide,
+    addSection2Img,
+    addSection3Img,
 
     addGallery,
     getGallery,

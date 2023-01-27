@@ -48,7 +48,7 @@ if (process.env.env === 'development') {
 }
 
 // mount all routes on /api path
-app.use('/v1', routes);
+app.use('/api/v1', routes);
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {

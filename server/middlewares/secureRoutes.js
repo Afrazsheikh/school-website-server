@@ -19,7 +19,7 @@ module.exports = function checkToken(req, res, next) {
 			} 
 			else 
 			{
-				req.payLoad = decode;
+				req.payload = decode;
 				next();
 			}
 		});
