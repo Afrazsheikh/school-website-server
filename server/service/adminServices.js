@@ -79,8 +79,8 @@ const getSections = (id, secType) => {
 const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try 
-        {
-            if(section == "section1" || "section4" || "galleries")
+        { 
+            if(section == "section1" || "section4" ||  "section5" || "galleries")
             {   
                 let sec = await models.school.updateOne(
                     {_id: id},
@@ -133,6 +133,15 @@ const updateSection = (id, section, secData) => {
                 );
 
                 return resolve("Slide updated successfully");
+            }else if(section == 'section5'){ 
+                let sec =  await models.school.findOneAndUpdate(
+                    {_id: id, "section5._id": secData.id},
+                    {$set: {
+                        "section5.$.heading": secData.heading,
+                        "section5.$.newsDate": secData.newsDate,
+                    }},
+                )
+
             }
             else {
                 return resolve("Slide updated successfully");
@@ -211,6 +220,41 @@ const deleteSec4Slide = (id, slideId) => {
     })
 }
 
+
+const deleteSec5Slide = (id, slideId) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside delete slide service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {section5: 1}
+            );     
+            
+            const index = school.section4.findIndex((sec) => sec._id == slideId);
+            if(index != -1) 
+            {
+                const deletedSlide = school.section5[index];
+                school.section5.splice(index, 1);
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {section5: school.section5}}
+                )
+                
+                fs.unlink(__dirname + '/../images/' + deletedSlide.img, (err) => {});
+            }
+     
+            return resolve("Slide deleted successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
+
+
+
 const addSection2Img = (id, param, imgFile) => {
     return new Promise(async (resolve, reject) => {
         try 
@@ -280,6 +324,28 @@ const addSection4Img = (id, param, imgFile) => {
                 await models.school.updateOne(
                     {_id: id},
                     {$set: {"section4.img": imgFile}}
+                );
+            }
+         
+            
+            return resolve("Image updated successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+const addSection5Img = (id, param, imgFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add section4 img service",{id, param});
+            if(param == 'img') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section5.img": imgFile}}
                 );
             }
          
@@ -407,9 +473,11 @@ module.exports  = {
     updateSection,
     deleteSlide,
     deleteSec4Slide,
+    deleteSec5Slide,
     addSection2Img,
     addSection3Img,
     addSection4Img,
+    addSection5Img,
     addSection7Img,
 
     deleteGallery,
