@@ -93,6 +93,12 @@ const addSection = (req, res, next)=>{
     else if(secType == "sec5")
     {
         section = "section5";
+        secData["heading"] = req.body.heading;
+        secData["newsDate"] = req.body.newsDate;
+        secData["img"] = req.body.slides[0].slideFile;
+
+
+        
     }
     else if(secType == "sec6")
     {
@@ -135,9 +141,12 @@ const updateSection = (req, res, next)=>{
     }
     else
     {
+
         section = "section5";
         secData["id"] = req.body.secId;
-        secData["title"] = req.body.title;
+        secData["heading"] = req.body.heading;
+        secData["newsDate"] = req.body.newsDate;
+
     }
 
     adminService.updateSection(req.payload.schoolId, section, secData).then(async (resp)=>{
@@ -208,6 +217,30 @@ const addSection4Img = (req, res) => {
     .catch(err=>{
         logger.fatal(err);
         res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+//section5
+const addSection5Img = (req, res) => {
+    logger.trace("inside add section 2 img controller");
+
+    adminService.addSection5Img(req.payload.schoolId, req.body.imgType, req.body.imgFile).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+const deleteSec5Slide = (req,res,next)=>{
+    let id = req.params.id;
+    logger.trace("inside  delete slide controller",id);
+    
+    adminService.deleteSec4Slide(req.payload.schoolId, id).then(async (data)=>{
+        res.status(200).json({success: true, message: data});
+    }).catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
 
@@ -334,6 +367,8 @@ module.exports = {
     updateSection,
     deleteSlide,
     deleteSec4Slide,
+    deleteSec5Slide,
+    addSection5Img,
     addSection2Img,
     addSection3Img,
     addSection4Img,
