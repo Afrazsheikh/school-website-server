@@ -28,6 +28,9 @@ router.route('/addSection7Img').post(authorize, uploads.uploadSection2Img.single
 router.route('/addGallery').post(authorize, uploads.uploadGallery.any('file'), adminController.addSection);
 router.route('/deleteGallery/:id').delete(authorize, adminController.deleteGallery);
 
+// Menus Apis
+// Careers
+router.route('/updateCareer').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateCareer);
 
 //Gallery
 /* router.route('/addGallery').post(bannersService.addGallery);

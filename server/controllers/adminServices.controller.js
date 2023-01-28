@@ -236,94 +236,19 @@ const addSection7Img = (req, res) => {
     });
 }
 
-const addGallery = (req,res,next)=>{
-    logger.trace("inside add addGallery  controller");
-    let gallery = req.body.gallery;
-  
-    adminService.addGallery(banners).then(async (galleryId)=>{
-        logger.info('After adding ....', galleryId);
-		
-    }).catch(err=>{
+// Careers
+const updateCareer = (req, res) => {
+    logger.trace("inside update career controller");
+
+    adminService.updateCareer(req.payload.schoolId, req.body).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
         logger.fatal(err);
-        return res.status(err.code?err.code:404).json({"success":false,"message":err.message});
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
 
-
-const getGallery = (req,res,next)=>{
-    let id = req.params.id
-    logger.trace("inside get getGallery by id controller",{id});
-    menuService.getGallery(id).then(data=>{
-        res.status(200).json({"success":true, "data":data});
-    }).catch(err=>{
-        logger.fatal(err);
-        return res.status(err.code?err.code:404).json({"success":false,"message":err.message});
-    });
-}
-
-const updateGallery = (req, res) => {
-	let galId = req.params.id;
-	let galleryObj = req.body;
-    logger.trace("inside update  controller",galId,galleryObj);
-	adminService.updateGallery(galId, galleryObj).then(data => {
-		res.status(200).json({"success":true, "data":data});
-	})
-	.catch((err) => {
-		logger.fatal(err);
-		return res.status(err.code?err.code:404).json({success: false, message: err.message});
-	})
-}
-
-
-const addNews = (req,res,next)=>{
-    logger.trace("inside add addNews  controller");
-    let news = req.body.news;
-  
-    adminService.addNews(news).then(async (newsId)=>{
-        logger.info('After adding  news....', newsId);
-		
-    }).catch(err=>{
-        logger.fatal(err);
-        return res.status(err.code?err.code:404).json({"success":false,"message":err.message});
-    });
-}
-
-
-const getNews = (req,res,next)=>{
-    let id = req.params.id
-    logger.trace("inside get getNews by id controller",{id});
-    menuService.getNews(id).then(data=>{
-        res.status(200).json({"success":true, "data":data});
-    }).catch(err=>{
-        logger.fatal(err);
-        return res.status(err.code?err.code:404).json({"success":false,"message":err.message});
-    });
-}
-
-const updateNews = (req, res) => {
-	let newsId = req.params.id;
-	let newsObj = req.body;
-    logger.trace("inside update  controller",newsId,newsObj);
-	adminService.updateNews(newsId, newsObj).then(data => {
-		res.status(200).json({"success":true, "data":data});
-	})
-	.catch((err) => {
-		logger.fatal(err);
-		return res.status(err.code?err.code:404).json({success: false, message: err.message});
-	})
-}
-
-const deleteNews = (req,res,next)=>{
-    let id = req.params.id;
-    logger.trace("inside  deleteNews controller",id);
-    adminService.deleteNews(id).then(async (data)=>{
-     
-        res.status(200).json({"success":true, "data":data});
-    }).catch(err=>{
-        logger.fatal(err);
-        return res.status(err.code?err.code:404).json({"success":false,"message":err.message});
-    });
-}
 
 module.exports = {
     addLogo,
@@ -339,13 +264,7 @@ module.exports = {
     addSection4Img,
     addSection7Img,
 
-    addGallery,
-    getGallery,
-    updateGallery,
     deleteGallery,
 
-    addNews,
-    getNews,
-    updateNews,
-    deleteNews
+    updateCareer
 }

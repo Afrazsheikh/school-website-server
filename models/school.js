@@ -71,6 +71,11 @@ const school =new Schema ({
     galleries: [{
         img: {type: String},
     }],
+    careers: {
+        mainTitle: {type: String},
+        description: {type: String},
+        img: {type: String}
+    }
 },
 {
     timestamps: true
