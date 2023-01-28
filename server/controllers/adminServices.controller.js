@@ -86,17 +86,13 @@ const addSection = (req, res, next)=>{
     else if(secType == "sec4")
     {
         section = "section4";
-        secData["id"] = req.body.secId;
         secData["title"] = req.body.title;
         secData["description"] = req.body.description;
-        secData["img"] = req.body.img;
+        secData["img"] = req.body.slides[0].slideFile;
     }
     else if(secType == "sec5")
     {
         section = "section5";
-        secData["id"] = req.body.secId;
-        secData["title"] = req.body.title;
-        secData["img"] = req.body.img;
     }
     else if(secType == "sec6")
     {
@@ -118,8 +114,6 @@ const addSection = (req, res, next)=>{
         return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
-
-
     
 const updateSection = (req, res, next)=>{
     logger.trace("inside add updateSection controller--->", req.body);
@@ -132,55 +126,18 @@ const updateSection = (req, res, next)=>{
         secData["id"] = req.body.id;
         secData["title"] = req.body.title;
     }
-    else if(secType =="sec2")
-    {
-
-        section = "section2";
-        secData["id"] = req.body.secId;
-        secData["title"] = req.body.title;
-        secData["description"] = req.body.description;
-        secData["bottomText1"] = req.body.bottomText1;
-        secData["bottomText2"] = req.body.bottomText2;
-        secData["bottomText3"] = req.body.bottomText3;
-
-    }
-    else if(secType =="sec3")
-    {
-        section = "section3";
-        secData["id"] = req.body.secId;
-        secData["title"] = req.body.title;
-        secData["description"] = req.body.description;
-        secData["img1"] = req.body.img1;
-    }
     else if(secType =="sec4")
     {
         section = "section4";
-        secData["id"] = req.body.secId;
+        secData["id"] = req.body.id;
         secData["title"] = req.body.title;
         secData["description"] = req.body.description;
-        secData["img"] = req.body.img;
-
-
     }
-    else if(secType =="sec5")
+    else
     {
         section = "section5";
         secData["id"] = req.body.secId;
         secData["title"] = req.body.title;
-        secData["img"] = req.body.img;
-    }
-    else if(secType =="sec5")
-    {
-        section = "section5";
-        secData["id"] = req.body.secId;
-        secData["title"] = req.body.title;
-        secData["img"] = req.body.img;
-    }
-    if(secType =="sec6")
-    {
-        section = "section6";
-        secData["id"] = req.body.secId;
-        secData["img"] = req.body.img;
     }
 
     adminService.updateSection(req.payload.schoolId, section, secData).then(async (resp)=>{
@@ -198,6 +155,18 @@ const deleteSlide = (req,res,next)=>{
     logger.trace("inside  delete slide controller",id);
     
     adminService.deleteSlide(req.payload.schoolId, id).then(async (data)=>{
+        res.status(200).json({success: true, message: data});
+    }).catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const deleteSec4Slide = (req,res,next)=>{
+    let id = req.params.id;
+    logger.trace("inside  delete slide controller",id);
+    
+    adminService.deleteSec4Slide(req.payload.schoolId, id).then(async (data)=>{
         res.status(200).json({success: true, message: data});
     }).catch(err=>{
         logger.fatal(err);
@@ -364,6 +333,7 @@ module.exports = {
     addSection,
     updateSection,
     deleteSlide,
+    deleteSec4Slide,
     addSection2Img,
     addSection3Img,
     addSection4Img,

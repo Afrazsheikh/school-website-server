@@ -80,7 +80,7 @@ const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try 
         {
-            if(section == "section1" || "galleries")
+            if(section == "section1" || "section4" || "galleries")
             {   
                 let sec = await models.school.updateOne(
                     {_id: id},
@@ -97,15 +97,6 @@ const addSection = (id, section, secData) => {
                 );
                 
                 return resolve("Section updated successfully");
-            }
-            //section4
-            else if(section == "section4"){
-                let sec  =  await models.school.updateOne(
-                    {_id: id},
-                    {$push: {[section]: secData}}
-                );
-                return resolve("Slide added successfully");
-
             }
             else {
                 return resolve("Section updated successfully");
@@ -132,15 +123,16 @@ const updateSection = (id, section, secData) => {
                 
                 return resolve("Slide updated successfully");
             }
-            else if(sectiom == 'section4'){
+            else if(section == 'section4') {
                 let sec = await models.school.findOneAndUpdate(
                     {_id: id, "section4._id": secData.id},
-                    {$set: {"section4.$.title": secData.title}},
-                    {$set:  {"section4.$.description": secData.description}},
-                    {$set:  {"section4.$.img": secData.img}}
+                    {$set: {
+                        "section4.$.title": secData.title,
+                        "section4.$.description": secData.description
+                    }},
                 );
-                return resolve("Slide updated successfully");
 
+                return resolve("Slide updated successfully");
             }
             else {
                 return resolve("Slide updated successfully");
@@ -176,6 +168,38 @@ const deleteSlide = (id, slideId) => {
                 
                 fs.unlink(__dirname + '/../images/' + deletedSlide.slideImg1, (err) => {});
                 fs.unlink(__dirname + '/../images/' + deletedSlide.slideImg2, (err) => {});
+            }
+     
+            return resolve("Slide deleted successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
+
+const deleteSec4Slide = (id, slideId) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside delete slide service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {section4: 1}
+            );     
+            
+            const index = school.section4.findIndex((sec) => sec._id == slideId);
+            if(index != -1) 
+            {
+                const deletedSlide = school.section4[index];
+                school.section4.splice(index, 1);
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {section4: school.section4}}
+                )
+                
+                fs.unlink(__dirname + '/../images/' + deletedSlide.img, (err) => {});
             }
      
             return resolve("Slide deleted successfully...");
@@ -499,6 +523,7 @@ module.exports  = {
     addSection,
     updateSection,
     deleteSlide,
+    deleteSec4Slide,
     addSection2Img,
     addSection3Img,
     addSection4Img,
