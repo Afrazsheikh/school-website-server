@@ -56,12 +56,22 @@ const school =new Schema ({
             img: {type: String},
         }
     ],
-    section6: [
-        {
-            id: {type: ObjectId},
-            img: {type: String},
-        }
-    ]
+    section7: {
+        title: {type: String},
+        subTitle: {type: String},
+        topLeftText: {type: String},
+        bottomLeftText: {type: String},
+        topRightText: {type: String},
+        bottomRightText: {type: String},
+        topLeftImage: {type: String},
+        topRightImage: {type: String},
+        centerImage: {type: String},
+        bottomLeftImage: {type: String},
+        bottomRightImage: {type: String}
+    },
+    galleries: [{
+        img: {type: String},
+    }],
 },
 {
     timestamps: true

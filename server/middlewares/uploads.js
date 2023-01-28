@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const logger = require('../../config/logger');
 const path = require('path');
 const { ObjectId } = require("mongodb");
-let slides = [];
+let slides = [], galleries = [];
 
 const imageFilter = (req, file, cb) => {
   if (file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
@@ -62,10 +62,27 @@ const storageSection2Img = multer.diskStorage({
   },
 });
 
+const storageGallery = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname+"/../../server/images");
+  },
+  filename: (req, file, cb) => {
+    console.log(file.originalname);
+    const id = new ObjectId();
+    const filename = "gallery" + id + path.extname(file.originalname);
+    galleries.push({
+      img: filename
+    });
+    req.body.galleries = galleries; 
+    cb(null, filename);
+  },
+});
+
 
 var uploadLogo = multer({ storage: storageLogo, fileFilter: imageFilter });
 var uploadSecImg = multer({ storage: storageSection, fileFilter: imageFilter });
 var editSecImg = multer({ storage: editStorageSection, fileFilter: imageFilter });
 var uploadSection2Img = multer({ storage: storageSection2Img, fileFilter: imageFilter });
+var uploadGallery = multer({ storage: storageGallery, fileFilter: imageFilter });
 
-module.exports = {uploadLogo, uploadSecImg, editSecImg, uploadSection2Img};
+module.exports = {uploadLogo, uploadSecImg, editSecImg, uploadSection2Img, uploadGallery};

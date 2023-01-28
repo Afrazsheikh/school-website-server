@@ -80,7 +80,7 @@ const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try 
         {
-            if(section == "section1")
+            if(section == "section1" || "galleries")
             {   
                 let sec = await models.school.updateOne(
                     {_id: id},
@@ -89,7 +89,7 @@ const addSection = (id, section, secData) => {
                 
                 return resolve("Slide added successfully");
             }
-            else if(section == "section2" || "section3")
+            else if(section == "section2" || "section3" || "section7")
             {
                 let sec = await models.school.updateOne(
                     {_id: id},
@@ -99,7 +99,7 @@ const addSection = (id, section, secData) => {
                 return resolve("Section updated successfully");
             }
             //section4
-            else if (section ==  "section4"){
+            else if(section == "section4"){
                 let sec  =  await models.school.updateOne(
                     {_id: id},
                     {$push: {[section]: secData}}
@@ -269,8 +269,83 @@ const addSection4Img = (id, param, imgFile) => {
 	})
 }
 
+const deleteGallery = (id, fileId) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside delete gallery service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {galleries: 1}
+            );     
+            
+            const index = school.galleries.findIndex((gall) => gall._id == fileId);
+            if(index != -1) 
+            {
+                const deletedImg = school.galleries[index];
+                school.galleries.splice(index, 1);
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {galleries: school.galleries}}
+                )
+                
+                fs.unlink(__dirname + '/../images/' + deletedImg.img, (err) => {});
+            }
+     
+            return resolve("Image deleted successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
 
 
+const addSection7Img = (id, param, imgFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add section2 img service",{id, param});
+            if(param == 'topLeft') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section7.topLeftImage": imgFile}}
+                );
+            }
+            else if(param == 'topRight') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section7.topRightImage": imgFile}}
+                );
+            }
+            else if(param == 'center') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section7.centerImage": imgFile}}
+                );
+            }
+            else if(param == 'bottomLeft') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section7.bottomLeftImage": imgFile}}
+                );
+            }
+            else {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section7.bottomRightImage": imgFile}}
+                );
+            }
+            
+            return resolve("Image updated successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
 
 
 const addGallery = (gallery) => {
@@ -332,27 +407,6 @@ const updateGallery= (_id,galleryObj) => {
         }
     })
 }
-
-const deleteGallery = (_id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            logger.trace("inside deleteGallery  service");
-            let gallery = await models.galleryAdd.deleteOne(
-                {_id},
-            );     
-            logger.debug(gallery);
-            if(!gallery.deletedCount){
-                return reject({code:422, message:"gallery not found"});
-            }       
-            return resolve("gallery deleted successfully...");
-        }
-        catch (err) {
-            logger.fatal(err);
-            reject({ code:401, message: err.message });
-        }
-    })
-}
-
 
 
 const addNews = (news) => {
@@ -448,6 +502,7 @@ module.exports  = {
     addSection2Img,
     addSection3Img,
     addSection4Img,
+    addSection7Img,
 
     addGallery,
     getGallery,
