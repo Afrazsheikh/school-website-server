@@ -35,18 +35,9 @@ router.route('/deleteGallery/:id').delete(authorize, adminController.deleteGalle
 // Menus Apis
 // Careers
 router.route('/updateCareer').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateCareer);
+router.route('/updateStudData').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateStudData);
 
-//Gallery
-/* router.route('/addGallery').post(bannersService.addGallery);
-router.route('/getGallery').get(bannersService.getGallery);
-router.route('/updateGAllery').put(bannersService.updateGallery);
-router.route('/deleteGallery').delete(bannersService.deleteGallery); */
-
-//News
-/* router.route('/addNews').post(bannersService.addNews);
-router.route('/getNews').get(bannersService.getNews);
-router.route('/updateNews').put(bannersService.updateNews);
-router.route('/deleteNews').delete(bannersService.deleteNews); */
+// Student Corner
 
 
 module.exports = router;

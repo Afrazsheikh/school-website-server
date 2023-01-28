@@ -70,7 +70,6 @@ const addSection = (req, res, next)=>{
             title: req.body.title,
             slideImg1: req.body.slides[0].slideFile,
             slideImg2: req.body.slides[1].slideFile
-
         }
     }
     else if(secType == "sec2")
@@ -96,9 +95,6 @@ const addSection = (req, res, next)=>{
         secData["heading"] = req.body.heading;
         secData["newsDate"] = req.body.newsDate;
         secData["img"] = req.body.slides[0].slideFile;
-
-
-        
     }
     else if(secType == "sec6")
     {
@@ -113,6 +109,7 @@ const addSection = (req, res, next)=>{
 
     adminService.addSection(req.payload.schoolId, section, secData).then(async (resp)=>{
         logger.info('After adding section....', resp);
+        req.body.slides.length = 0;
         res.status(200).json({success: true, message: resp});
     })
     .catch(err=>{
@@ -143,10 +140,9 @@ const updateSection = (req, res, next)=>{
     {
 
         section = "section5";
-        secData["id"] = req.body.secId;
+        secData["id"] = req.body.id;
         secData["heading"] = req.body.heading;
         secData["newsDate"] = req.body.newsDate;
-
     }
 
     adminService.updateSection(req.payload.schoolId, section, secData).then(async (resp)=>{
@@ -236,7 +232,7 @@ const deleteSec5Slide = (req,res,next)=>{
     let id = req.params.id;
     logger.trace("inside  delete slide controller",id);
     
-    adminService.deleteSec4Slide(req.payload.schoolId, id).then(async (data)=>{
+    adminService.deleteSec5Slide(req.payload.schoolId, id).then(async (data)=>{
         res.status(200).json({success: true, message: data});
     }).catch(err=>{
         logger.fatal(err);
@@ -282,6 +278,57 @@ const updateCareer = (req, res) => {
     });
 }
 
+// Update Stud Corner
+const updateStudData = (req, res) => {
+    logger.trace("inside update career controller");
+    let param = {};
+
+    if(req.body.imgType) {
+        if(req.body.imgType == "img1") {
+            param = {
+                "studCorner.img1": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "img2") {
+            param = {
+                "studCorner.img2": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "img3") {
+            param = {
+                "studCorner.img3": req.body.imgFile
+            }
+        }
+        else {
+            param = {
+                "studCorner.img4": req.body.imgFile
+            }
+        }
+    }
+    else 
+    {
+        param = {
+            "studCorner.mainTitle": req.body.mainTitle,
+            "studCorner.title1": req.body.title1,
+            "studCorner.desc1": req.body.desc1,
+            "studCorner.title2": req.body.title2,
+            "studCorner.desc2": req.body.desc2,
+            "studCorner.title3": req.body.title3,
+            "studCorner.desc3": req.body.desc3,
+            "studCorner.title4": req.body.title4,
+            "studCorner.desc4": req.body.desc4,
+        }
+    }
+
+    adminService.updateStudData(req.payload.schoolId, param).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
 
 module.exports = {
     addLogo,
@@ -301,5 +348,6 @@ module.exports = {
 
     deleteGallery,
 
-    updateCareer
+    updateCareer,
+    updateStudData
 }

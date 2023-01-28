@@ -133,7 +133,8 @@ const updateSection = (id, section, secData) => {
                 );
 
                 return resolve("Slide updated successfully");
-            }else if(section == 'section5'){ 
+            }
+            else if(section == 'section5') { 
                 let sec =  await models.school.findOneAndUpdate(
                     {_id: id, "section5._id": secData.id},
                     {$set: {
@@ -142,6 +143,7 @@ const updateSection = (id, section, secData) => {
                     }},
                 )
 
+                return resolve("News updated successfully");
             }
             else {
                 return resolve("Slide updated successfully");
@@ -231,7 +233,7 @@ const deleteSec5Slide = (id, slideId) => {
                 {section5: 1}
             );     
             
-            const index = school.section4.findIndex((sec) => sec._id == slideId);
+            const index = school.section5.findIndex((sec) => sec._id == slideId);
             if(index != -1) 
             {
                 const deletedSlide = school.section5[index];
@@ -463,6 +465,22 @@ const updateCareer = (id, postData) => {
 	})
 }
 
+const updateStudData = (id, param) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {   
+            let sec = await models.school.findOneAndUpdate(
+                {_id: id},
+                {$set: param});    
+           
+            return resolve("Student Corner updated successfully");   
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+		}
+	})
+}
 
 module.exports  = {
     addLogo,
@@ -482,5 +500,6 @@ module.exports  = {
 
     deleteGallery,
 
-    updateCareer
+    updateCareer,
+    updateStudData
 }

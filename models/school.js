@@ -50,7 +50,7 @@ const school =new Schema ({
     ],
     section5: [
         {
-            heading: {type: ObjectId},
+            heading: {type: String},
             newsDate: {type: String},
             img: {type: String},
         }
@@ -75,6 +75,21 @@ const school =new Schema ({
         mainTitle: {type: String},
         description: {type: String},
         img: {type: String}
+    },
+    studCorner: {
+        mainTitle: {type: String},
+        title1: {type: String},
+        desc1: {type: String},
+        img1: {type: String},
+        title2: {type: String},
+        desc2: {type: String},
+        img2: {type: String},
+        title3: {type: String},
+        desc3: {type: String},
+        img3: {type: String},
+        title4: {type: String},
+        desc4: {type: String},
+        img4: {type: String}
     }
 },
 {
