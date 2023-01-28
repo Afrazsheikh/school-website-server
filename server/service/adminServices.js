@@ -132,7 +132,7 @@ const updateSection = (id, section, secData) => {
                 
                 return resolve("Slide updated successfully");
             }
-            else if(sectiom == 'section4'){
+            else if(section == 'section4'){
                 let sec = await models.school.findOneAndUpdate(
                     {_id: id, "section4._id": secData.id},
                     {$set: {"section4.$.title": secData.title}},

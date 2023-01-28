@@ -22,6 +22,12 @@ router.route('/updateSection').put(authorize, uploads.editSecImg.any('file'), ad
 router.route('/deleteSection/:id').delete(authorize, adminController.deleteSlide);
 router.route('/addSection2Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection2Img);
 router.route('/addSection3Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection3Img);
+//sectoin 4
+router.route('/addSection4Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection4Img);
+
+router.route('/addSection4').post(authorize, uploads.uploadSecImg.any('file'), adminController.addSection);
+
+
 
 //Gallery
 /* router.route('/addGallery').post(bannersService.addGallery);
