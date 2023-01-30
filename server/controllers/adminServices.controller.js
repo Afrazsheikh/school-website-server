@@ -265,7 +265,19 @@ const addSection7Img = (req, res) => {
     });
 }
 
-// Careers
+// about US readMore
+const updateAboutRM = (req, res) => {
+    logger.trace("inside update  controller");
+
+    adminService.updateAboutRM(req.payload.schoolId, req.body).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+//carrer
 const updateCareer = (req, res) => {
     logger.trace("inside update career controller");
 
@@ -329,6 +341,52 @@ const updateStudData = (req, res) => {
     });
 }
 
+//update  About us
+const updateAboutUs = (req, res) => {
+    logger.trace("inside update career controller");
+    let param = {};
+
+    if(req.body.imgType) {
+        if(req.body.imgType == "img1") {
+            param = {
+                "aboutUs.img1": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "img2") {
+            param = {
+                "aboutUs.img2": req.body.imgFile
+            }
+        }
+       
+        else {
+            param = {
+                "aboutUs.img3": req.body.imgFile
+            }
+        }
+    }
+    else 
+    {
+        param = {
+            "aboutUs.mainTitle": req.body.mainTitle,
+            "aboutUs.title1": req.body.title1,
+            "aboutUs.desc1": req.body.desc1,
+            "aboutUs.title2": req.body.title2,
+            "aboutUs.desc2": req.body.desc2,
+            "aboutUs.title3": req.body.title3,
+            "aboutUs.desc3": req.body.desc3,
+         
+        }
+    }
+
+    adminService.updateAboutUs(req.payload.schoolId, param).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
 
 module.exports = {
     addLogo,
@@ -349,5 +407,7 @@ module.exports = {
     deleteGallery,
 
     updateCareer,
-    updateStudData
+    updateStudData,
+    updateAboutUs,
+    updateAboutRM
 }

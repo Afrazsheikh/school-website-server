@@ -465,6 +465,35 @@ const updateCareer = (id, postData) => {
 	})
 }
 
+// aboutUs read mroe
+
+const updateAboutUSRM = (id, postData) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {  
+            if(postData.imgType == 'img') {
+                let sec = await models.school.findOneAndUpdate(
+                    {_id: id},
+                    {$set: {"AboutUSRM.img": postData.imgFile}});    
+            }
+            else {
+                let sec = await models.school.findOneAndUpdate(
+                    {_id: id},
+                    {$set: {"AboutUSRM.message": postData.message, 
+                        "AboutUSRM.description": postData.description}}
+                );
+            }  
+            
+            return resolve("Career updated successfully");   
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+		}
+	})
+}
+
+
 const updateStudData = (id, param) => {
     return new Promise(async (resolve, reject) => {
         try 
@@ -474,6 +503,22 @@ const updateStudData = (id, param) => {
                 {$set: param});    
            
             return resolve("Student Corner updated successfully");   
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+		}
+	})
+}
+const updateAboutUs = (id, param) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {   
+            let sec = await models.school.findOneAndUpdate(
+                {_id: id},
+                {$set: param});    
+           
+            return resolve("Student Abouts updated successfully");   
         }
         catch (err) {
             logger.fatal(err);
@@ -501,5 +546,7 @@ module.exports  = {
     deleteGallery,
 
     updateCareer,
-    updateStudData
+    updateStudData,
+    updateAboutUs,
+    
 }
