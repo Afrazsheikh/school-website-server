@@ -76,12 +76,6 @@ const school =new Schema ({
         description: {type: String},
         img: {type: String}
     },
-    aboutUsRM: { 
-        message: {type: String},
-        description: {type: String},
-        img: {type: String}
-        
-    },
     studCorner: {
         mainTitle: {type: String},
         title1: {type: String},
@@ -101,16 +95,26 @@ const school =new Schema ({
         mainTitle: {type: String},
         title1: {type: String},
         desc1: {type: String},
+        modalMessage1: {type: String},
         img1: {type: String},
         title2: {type: String},
         desc2: {type: String},
+        modalMessage2: {type: String},
         img2: {type: String},
         title3: {type: String},
         desc3: {type: String},
+        modalMessage3: {type: String},
         img3: {type: String},
-
-
-
+    },
+    admission: {
+        step1Title: {type: String},
+        step1Desc: {type: String},
+        step2Title: {type: String},
+        step2Desc: {type: String},
+        step3Title: {type: String},
+        step3Desc: {type: String},
+        step4Title: {type: String},
+        step4Desc: {type: String}
     }
 },
 {
