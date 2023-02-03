@@ -289,6 +289,33 @@ const updateCareer = (req, res) => {
         res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
+//addmission
+const updateAdmData = (req, res) => {
+    logger.trace("inside update  controller");
+    let param = {};
+
+        param = {
+        
+            "admission.title1": req.body.title1,
+            "admission.desc1": req.body.desc1,
+            "admission.title2": req.body.title2,
+            "admission.desc2": req.body.desc2,
+            "admission.title3": req.body.title3,
+            "admission.desc3": req.body.desc3,
+            "admission.title4": req.body.title4,
+            "admission.desc4": req.body.desc4,
+        }
+
+
+    adminService.updateAdmData(req.payload.schoolId, param).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
 
 // Update Stud Corner
 const updateStudData = (req, res) => {
@@ -409,5 +436,6 @@ module.exports = {
     updateCareer,
     updateStudData,
     updateAboutUs,
-    updateAboutRM
+    updateAboutRM,
+    updateAdmData
 }

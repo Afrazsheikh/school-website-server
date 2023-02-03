@@ -526,6 +526,23 @@ const updateAboutUs = (id, param) => {
 		}
 	})
 }
+const updateAdmData = (id, param) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {   
+            let sec = await models.school.findOneAndUpdate(
+                {_id: id},
+                {$set: param});    
+           
+            return resolve("Student addmissin updated successfully");   
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+		}
+	})
+}
+
 
 module.exports  = {
     addLogo,
@@ -548,5 +565,6 @@ module.exports  = {
     updateCareer,
     updateStudData,
     updateAboutUs,
+    updateAdmData
     
 }

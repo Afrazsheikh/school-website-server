@@ -35,6 +35,8 @@ router.route('/deleteGallery/:id').delete(authorize, adminController.deleteGalle
 // Menus Apis
 // Careers
 router.route('/updateCareer').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateCareer);
+router.route('/updateAdmData').post(authorize,  adminController.updateAdmData);
+
 router.route('/updateAboutUSRM').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateAboutRM);
 
 router.route('/updateStudData').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateStudData);
