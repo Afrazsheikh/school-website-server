@@ -98,8 +98,17 @@ const addSection = (req, res, next)=>{
     }
     else if(secType == "sec6")
     {
-        section = "galleries";
-        secData = req.body.galleries
+        secData["academicYear"] = {
+            from: '',
+            to: ''
+        };
+
+        section = "section6";
+        secData["title"] = req.body.title;
+        secData["subTitle"] = req.body.subTitle;
+        secData["academicYear"]["from"] = req.body.fromYear;
+        secData["academicYear"]["to"] = req.body.toYear;
+        secData["coverImage"] = req.body.slides[0].slideFile;
     }
     else
     {
@@ -114,6 +123,7 @@ const addSection = (req, res, next)=>{
     })
     .catch(err=>{
         logger.fatal(err);
+        req.body.slides.length = 0;
         return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
@@ -136,13 +146,25 @@ const updateSection = (req, res, next)=>{
         secData["title"] = req.body.title;
         secData["description"] = req.body.description;
     }
-    else
+    else if(secType == "sec5")
     {
 
         section = "section5";
         secData["id"] = req.body.id;
         secData["heading"] = req.body.heading;
         secData["newsDate"] = req.body.newsDate;
+    }
+    else {
+        section = "section6";
+        secData["academicYear"] = {
+            from: '',
+            to: ''
+        };
+        secData["id"] = req.body.id;
+        secData["title"] = req.body.title;
+        secData["subTitle"] = req.body.subTitle;
+        secData["academicYear"]["from"] = req.body.fromYear;
+        secData["academicYear"]["to"] = req.body.toYear;
     }
 
     adminService.updateSection(req.payload.schoolId, section, secData).then(async (resp)=>{
@@ -218,7 +240,7 @@ const addSection4Img = (req, res) => {
 
 //section5
 const addSection5Img = (req, res) => {
-    logger.trace("inside add section 2 img controller");
+    logger.trace("inside add section 5 img controller");
 
     adminService.addSection5Img(req.payload.schoolId, req.body.imgType, req.body.imgFile).then(async (resp)=>{
         res.status(200).json({success: true, message: resp});
@@ -228,6 +250,7 @@ const addSection5Img = (req, res) => {
         res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
+
 const deleteSec5Slide = (req,res,next)=>{
     let id = req.params.id;
     logger.trace("inside  delete slide controller",id);
@@ -240,10 +263,59 @@ const deleteSec5Slide = (req,res,next)=>{
     });
 }
 
-const deleteGallery = (req,res,next)=>{
+//section6
+const addSection6Img = (req, res) => {
+    logger.trace("inside add section 6 img controller");
+
+    adminService.addSection6Img(req.payload.schoolId, req.body.imgType, req.body.imgFile).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const deleteSec6Slide = (req,res,next)=>{
     let id = req.params.id;
-    logger.trace("inside  deleteGallery controller",id);
-    adminService.deleteGallery(req.payload.schoolId, id).then(async (data)=>{
+    logger.trace("inside  delete slide controller",id);
+    
+    adminService.deleteSec6Slide(req.payload.schoolId, id).then(async (data)=>{
+        res.status(200).json({success: true, message: data});
+    }).catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const getGalleries = (req, res) => {
+    logger.info("inside  get Gallery controller");
+    adminService.getGalleries(req.query.album).then(async (data)=>{
+        res.status(200).json({success:true, data: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const addGalleries = (req, res) => {
+    logger.info("inside  add Gallery controller");
+    adminService.addGalleries(req.body.album, req.body.galleries).then(async (data)=>{
+        req.body.galleries.length = 0;
+        res.status(200).json({success:true, message: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        req.body.galleries.length = 0;
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const deleteGallery = (req,res,next)=>{
+    let album = req.params.id;
+    logger.trace("inside  deleteGallery controller");
+    adminService.deleteGallery(album, req.query.fileId).then(async (data)=>{
         res.status(200).json({success:true, message: data});
     })
     .catch(err=>{
@@ -296,14 +368,14 @@ const updateAdmData = (req, res) => {
 
         param = {
         
-            "admission.title1": req.body.title1,
-            "admission.desc1": req.body.desc1,
-            "admission.title2": req.body.title2,
-            "admission.desc2": req.body.desc2,
-            "admission.title3": req.body.title3,
-            "admission.desc3": req.body.desc3,
-            "admission.title4": req.body.title4,
-            "admission.desc4": req.body.desc4,
+            "admission.step1Title": req.body.title1,
+            "admission.step1Desc": req.body.description1,
+            "admission.step2Title": req.body.title2,
+            "admission.step2Desc": req.body.description2,
+            "admission.step3Title": req.body.title3,
+            "admission.step3Desc": req.body.description3,
+            "admission.step4Title": req.body.title4,
+            "admission.step4Desc": req.body.description4,
         }
 
 
@@ -414,6 +486,43 @@ const updateAboutUs = (req, res) => {
     });
 }
 
+// Gallery Album
+const getAlbums = (req, res) => {
+    logger.trace("inside get album  controller");
+
+    adminService.getAlbums().then(async (resp)=>{
+        res.status(200).json({success: true, data: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const addAlbum = (req, res) => {
+    logger.trace("inside add album  controller");
+
+    adminService.addAlbum(req.body).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const deleteAlbum = (req, res) => {
+    let album = req.params.id;
+    logger.trace("inside  delete Album controller");
+    adminService.deleteAlbum(album).then(async (data)=>{
+        res.status(200).json({success:true, message: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
 
 module.exports = {
     addLogo,
@@ -425,17 +534,25 @@ module.exports = {
     deleteSlide,
     deleteSec4Slide,
     deleteSec5Slide,
+    deleteSec6Slide,
     addSection5Img,
     addSection2Img,
     addSection3Img,
     addSection4Img,
     addSection7Img,
+    addSection6Img,
 
+    getGalleries,
+    addGalleries,
     deleteGallery,
 
     updateCareer,
     updateStudData,
     updateAboutUs,
     updateAboutRM,
-    updateAdmData
+    updateAdmData,
+
+    getAlbums,
+    addAlbum,
+    deleteAlbum
 }

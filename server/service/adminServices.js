@@ -145,6 +145,19 @@ const updateSection = (id, section, secData) => {
 
                 return resolve("News updated successfully");
             }
+            else if(section == 'section6') {
+                let sec =  await models.school.findOneAndUpdate(
+                    {_id: id, "section6._id": secData.id},
+                    {$set: {
+                        "section6.$.title": secData.title,
+                        "section6.$.subTitle": secData.subTitle,
+                        "section6.$.academicYear.from": secData.academicYear.from,
+                        "section6.$.academicYear.to": secData.academicYear.to
+                    }},
+                )
+
+                return resolve("News updated successfully");
+            }
             else {
                 return resolve("Slide updated successfully");
             }
@@ -255,7 +268,37 @@ const deleteSec5Slide = (id, slideId) => {
     })
 }
 
-
+const deleteSec6Slide = (id, slideId) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside delete slide service");
+            let school = await models.school.findOne(
+                {_id: id},
+                {section6: 1}
+            );     
+            
+            const index = school.section6.findIndex((sec) => sec._id == slideId);
+            if(index != -1) 
+            {
+                const deletedSlide = school.section6[index];
+                school.section6.splice(index, 1);
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {section6: school.section6}}
+                )
+                
+                fs.unlink(__dirname + '/../images/' + deletedSlide.coverImage, (err) => {});
+            }
+     
+            return resolve("Slide deleted successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
 
 const addSection2Img = (id, param, imgFile) => {
     return new Promise(async (resolve, reject) => {
@@ -361,27 +404,87 @@ const addSection5Img = (id, param, imgFile) => {
 	})
 }
 
-const deleteGallery = (id, fileId) => {
+const addSection6Img = (id, param, imgFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add section6 img service",{id, param});
+            if(param == 'img') {
+                await models.school.updateOne(
+                    {_id: id},
+                    {$set: {"section5.img": imgFile}}
+                );
+            }
+         
+            
+            return resolve("Image updated successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+const getGalleries = (album) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside get gallery service");
+            let images = await models.album.findOne(
+                {albumName: album},
+                {images: 1, _id: 0}
+            );     
+     
+            return resolve(images);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    }) 
+}
+
+const addGalleries = (albumName, galleries) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add gallery service");
+            let album = await models.album.updateOne(
+                {albumName: albumName},
+                {$push: {images: galleries}}
+            );     
+     
+            return resolve("Images added successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
+
+const deleteGallery = (albumName, fileId) => {
     return new Promise(async (resolve, reject) => {
         try 
         {
             logger.trace("inside delete gallery service");
-            let school = await models.school.findOne(
-                {_id: id},
-                {galleries: 1}
+            let album = await models.album.findOne(
+                {albumName: albumName},
+                {images: 1}
             );     
             
-            const index = school.galleries.findIndex((gall) => gall._id == fileId);
+            const index = album.images.findIndex((gall) => gall == fileId);
             if(index != -1) 
             {
-                const deletedImg = school.galleries[index];
-                school.galleries.splice(index, 1);
-                await models.school.updateOne(
-                    {_id: id},
-                    {$set: {galleries: school.galleries}}
+                const deletedImg = album.images[index];
+                album.images.splice(index, 1);
+                await models.album.updateOne(
+                    {albumName: albumName},
+                    {$set: {images: album.images}}
                 )
                 
-                fs.unlink(__dirname + '/../images/' + deletedImg.img, (err) => {});
+                fs.unlink(__dirname + '/../images/' + deletedImg, (err) => {});
             }
      
             return resolve("Image deleted successfully...");
@@ -543,6 +646,67 @@ const updateAdmData = (id, param) => {
 	})
 }
 
+const getAlbums = () => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside get albums service");
+            let albums = await models.album.find({});            
+            return resolve(albums);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+const addAlbum = (param) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            let name = param.fromYear + '-' + param.toYear;
+            logger.trace("inside add album");
+            await models.album.insertMany({albumName: name});   
+            
+            resolve("Album added successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            if(err.code == 11000) {
+                reject({ code: 400, message: "Album is already added." });
+            }
+            else {
+                reject({ code: 400, message: err.message });
+            }
+		}
+	})
+}
+
+const deleteAlbum = (albumName) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside delete album service");
+            let album = await models.album.findOneAndDelete(
+                {albumName: albumName},
+            );     
+            
+            if(album) {
+                album.images.forEach(img => {
+                    fs.unlink(__dirname + '/../images/' + img, (err) => {});
+                });
+            }
+     
+            return resolve("Image deleted successfully...");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:401, message: err.message });
+        }
+    })
+}
+
 
 module.exports  = {
     addLogo,
@@ -554,17 +718,22 @@ module.exports  = {
     deleteSlide,
     deleteSec4Slide,
     deleteSec5Slide,
+    deleteSec6Slide,
     addSection2Img,
     addSection3Img,
     addSection4Img,
     addSection5Img,
     addSection7Img,
-
+    getGalleries,
+    addGalleries,
     deleteGallery,
 
     updateCareer,
     updateStudData,
     updateAboutUs,
-    updateAdmData
-    
+    updateAdmData,
+
+    getAlbums,
+    addAlbum,
+    deleteAlbum
 }

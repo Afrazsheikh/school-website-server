@@ -70,9 +70,7 @@ const storageGallery = multer.diskStorage({
     console.log(file.originalname);
     const id = new ObjectId();
     const filename = "gallery" + id + path.extname(file.originalname);
-    galleries.push({
-      img: filename
-    });
+    galleries.push(filename);
     req.body.galleries = galleries; 
     cb(null, filename);
   },

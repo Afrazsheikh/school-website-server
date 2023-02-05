@@ -22,14 +22,16 @@ router.route('/updateSection').put(authorize, uploads.editSecImg.any('file'), ad
 router.route('/deleteSection/:id').delete(authorize, adminController.deleteSlide);
 router.route('/deleteSection4/:id').delete(authorize, adminController.deleteSec4Slide);
 router.route('/deleteSection5/:id').delete(authorize, adminController.deleteSec5Slide);
+router.route('/deleteSection6/:id').delete(authorize, adminController.deleteSec6Slide);
 
 router.route('/addSection2Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection2Img);
 router.route('/addSection3Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection3Img);
 router.route('/addSection4Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection4Img);
 router.route('/addSection5Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection5Img);
+router.route('/addSection6Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection5Img);
 
 router.route('/addSection7Img').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addSection7Img);
-router.route('/addGallery').post(authorize, uploads.uploadGallery.any('file'), adminController.addSection);
+router.route('/addGallery').post(authorize, uploads.uploadGallery.any('file'), adminController.addGalleries);
 router.route('/deleteGallery/:id').delete(authorize, adminController.deleteGallery);
 
 // Menus Apis
@@ -39,11 +41,16 @@ router.route('/updateAdmData').post(authorize,  adminController.updateAdmData);
 
 router.route('/updateAboutUSRM').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateAboutRM);
 
+// Student Corner
 router.route('/updateStudData').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateStudData);
 router.route('/updateAboutUs').post(authorize, uploads.uploadSection2Img.single('file'), adminController.updateAboutUs);
 
 
-// Student Corner
+// Gallery Album
+router.route('/getAlbums').get(authorize, adminController.getAlbums);
+router.route('/getGalleries').get(authorize, adminController.getGalleries);
+router.route('/addAlbum').post(authorize, adminController.addAlbum);
+router.route('/deleteAlbum/:id').delete(authorize, adminController.deleteAlbum);
 
 
 module.exports = router;

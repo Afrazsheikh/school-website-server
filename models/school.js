@@ -68,8 +68,14 @@ const school =new Schema ({
         bottomLeftImage: {type: String},
         bottomRightImage: {type: String}
     },
-    galleries: [{
-        img: {type: String},
+    section6: [{
+        academicYear: {
+            from: {type: Number},
+            to: {type: Number},
+        },
+        title: {type: String},
+        subTitle: {type: String},
+        coverImage: {type: String}
     }],
     careers: {
         mainTitle: {type: String},

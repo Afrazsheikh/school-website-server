@@ -2,14 +2,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const galleryuSchema =new Schema ({
-    galleries: [{
-        logoImage: String,
-    }]
+    albumName: {type: String, index: {unique: true}, required: [true, 'Album name is required']},
+    images: {type: Array, default: []}
 },
 {
     timestamps: true
 }); 
 
-const GalleryAdd = mongoose.model("GalleryAdd", galleryuSchema);
+const Album = mongoose.model("album", galleryuSchema);
 
-module.exports = GalleryAdd;
+module.exports = Album;
