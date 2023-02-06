@@ -707,6 +707,28 @@ const deleteAlbum = (albumName) => {
     })
 }
 
+// Documents
+const addDocument = (id, docType, docFile, originalFile) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside add docs service",{id, docFile});
+            await models.school.updateOne(
+                {_id: id},
+                {$set: {[`documents.${[docType]}`]: docFile}}
+            );
+            
+            fs.unlink(__dirname + '/../documents/' + originalFile, (err) => {});
+            
+            return resolve("Document added successfully");
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
 
 module.exports  = {
     addLogo,
@@ -735,5 +757,7 @@ module.exports  = {
 
     getAlbums,
     addAlbum,
-    deleteAlbum
+    deleteAlbum,
+
+    addDocument
 }

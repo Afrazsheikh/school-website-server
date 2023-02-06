@@ -121,6 +121,22 @@ const school =new Schema ({
         step3Desc: {type: String},
         step4Title: {type: String},
         step4Desc: {type: String}
+    },
+    documents: {
+        trustDoc: {type: String},
+        nocDoc: {type: String},
+        recogDoc: {type: String},
+        buildingDoc: {type: String},
+        fireDoc: {type: String},
+        deoDoc: {type: String},
+        healthDoc: {type: String},
+        feeDoc: {type: String},
+        smcDoc: {type: String},
+        ptaDoc: {type: String},
+        resultDoc: {type: String},
+        /* trustDoc: {type: String},
+        trustDoc: {type: String},
+        trustDoc: {type: String}, */
     }
 },
 {

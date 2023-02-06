@@ -13,6 +13,14 @@ const imageFilter = (req, file, cb) => {
   }
 };
 
+const docFilter = (req, file, cb) => {
+  if (file.mimetype == 'application/pdf' || file.mimetype == 'application/msword') {
+    cb(null, true);
+  } else {
+    cb("Please upload a pdf or word file.", false);
+  }
+};
+
 const storageLogo = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, __dirname+"/../../server/images");
@@ -76,6 +84,19 @@ const storageGallery = multer.diskStorage({
   },
 });
 
+const storageDoc = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname+"/../../server/documents");
+  },
+  filename: (req, file, cb) => {
+    console.log(file.originalname);
+    const id = new ObjectId();
+    const filename = "doc" + id + path.extname(file.originalname);
+    req.body.docFile = filename; 
+    cb(null, filename);
+  },
+});
+
 
 var uploadLogo = multer({ storage: storageLogo, fileFilter: imageFilter });
 var uploadSecImg = multer({ storage: storageSection, fileFilter: imageFilter });
@@ -83,4 +104,6 @@ var editSecImg = multer({ storage: editStorageSection, fileFilter: imageFilter }
 var uploadSection2Img = multer({ storage: storageSection2Img, fileFilter: imageFilter });
 var uploadGallery = multer({ storage: storageGallery, fileFilter: imageFilter });
 
-module.exports = {uploadLogo, uploadSecImg, editSecImg, uploadSection2Img, uploadGallery};
+var uploadDoc = multer({storage: storageDoc, fileFilter: docFilter});
+
+module.exports = {uploadLogo, uploadSecImg, editSecImg, uploadSection2Img, uploadGallery, uploadDoc};

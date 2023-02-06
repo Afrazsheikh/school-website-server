@@ -52,6 +52,9 @@ router.route('/getGalleries').get(authorize, adminController.getGalleries);
 router.route('/addAlbum').post(authorize, adminController.addAlbum);
 router.route('/deleteAlbum/:id').delete(authorize, adminController.deleteAlbum);
 
+// Add Documents
+router.route('/addDocument').post(authorize, uploads.uploadDoc.single('file'), adminController.addDocument);
+
 
 module.exports = router;
 

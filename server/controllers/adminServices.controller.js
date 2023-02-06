@@ -523,6 +523,20 @@ const deleteAlbum = (req, res) => {
     });
 }
 
+// Documents
+const addDocument = (req, res, next) => {
+    logger.trace("inside add document controller");
+
+    adminService.addDocument(req.payload.schoolId, req.body.docType, req.body.docFile, req.body.originalFile)
+    .then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
 
 module.exports = {
     addLogo,
@@ -554,5 +568,7 @@ module.exports = {
 
     getAlbums,
     addAlbum,
-    deleteAlbum
+    deleteAlbum,
+
+    addDocument
 }
