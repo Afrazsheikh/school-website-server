@@ -118,12 +118,16 @@ const addSection = (req, res, next)=>{
 
     adminService.addSection(req.payload.schoolId, section, secData).then(async (resp)=>{
         logger.info('After adding section....', resp);
-        req.body.slides.length = 0;
+        if(req.body.slides) {
+            req.body.slides.length = 0;
+        }
         res.status(200).json({success: true, message: resp});
     })
     .catch(err=>{
         logger.fatal(err);
-        req.body.slides.length = 0;
+        if(req.body.slides) {
+            req.body.slides.length = 0;
+        }
         return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }
@@ -302,12 +306,16 @@ const getGalleries = (req, res) => {
 const addGalleries = (req, res) => {
     logger.info("inside  add Gallery controller");
     adminService.addGalleries(req.body.album, req.body.galleries).then(async (data)=>{
-        req.body.galleries.length = 0;
+        if(req.body.galleries) {
+            req.body.galleries.length = 0;
+        }
         res.status(200).json({success:true, message: data});
     })
     .catch(err=>{
         logger.fatal(err);
-        req.body.galleries.length = 0;
+        if(req.body.galleries) {
+            req.body.galleries.length = 0;
+        }
         return res.status(err.code?err.code:404).json({success: false, message: err.message});
     });
 }

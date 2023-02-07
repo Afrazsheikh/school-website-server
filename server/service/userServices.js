@@ -42,7 +42,32 @@ const userLogin = (userCreds, res)=>{
   });
 };
 
+const getSchoolData = (id, param = null)=>{
+  logger.trace("inside get school data");
+
+  return new Promise(async (resolve, reject)=>{
+    try
+    {
+      let schoolData;
+
+      if(param) {
+        schoolData = await models.school.findOne({_id: id}, {[param]: 1});
+      }
+      else {
+			  schoolData = await models.school.findOne({_id: id}, {_id: 0, __v: 0});
+		  }
+      
+      resolve(schoolData);
+    }
+    catch(err){
+      logger.fatal(err);
+      reject("Unable to fetch data");
+    }
+  });
+};
+
 
 module.exports = {
-  userLogin
+  userLogin,
+  getSchoolData
 };

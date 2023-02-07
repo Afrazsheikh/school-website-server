@@ -80,16 +80,16 @@ const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try 
         { 
-            if(section == "section1" || "section4" ||  "section5" || "galleries")
+            if(section == "section1" || section == "section4" ||  section == "section5" || section == "galleries")
             {   
                 let sec = await models.school.updateOne(
                     {_id: id},
                     {$push: {[section]: secData}}
                 );
-                
+                              
                 return resolve("Slide added successfully");
             }
-            else if(section == "section2" || "section3" || "section7")
+            else if(section == "section2" || section == "section3" || section == "section7")
             {
                 let sec = await models.school.updateOne(
                     {_id: id},

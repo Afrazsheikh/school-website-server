@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.route('/login').post(controller.userLogin);
 //Add routes here
+router.route('/getSchoolData/:id').get(controller.getSchoolData);
 
 module.exports = router;
 

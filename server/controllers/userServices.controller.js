@@ -25,6 +25,20 @@ const userLogin = (req,res,next)=>{
   });
 }
 
+const getSchoolData = (req,res,next)=>{
+
+  logger.trace("inside userLogin controller");
+
+  userService.getSchoolData(req.params.id, req.query.param).then(data=>{
+    res.status(200).json({success: true, schoolData: data});
+  })
+  .catch(err => {
+	  logger.trace(err);
+    res.status(400).json({success: false, message: err});
+  });
+}
+
 module.exports = {
   userLogin,
+  getSchoolData
 };
