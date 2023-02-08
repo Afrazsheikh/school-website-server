@@ -66,8 +66,48 @@ const getSchoolData = (id, param = null)=>{
   });
 };
 
+const getAlbums = ()=>{
+  logger.trace("inside get albums data");
+
+  return new Promise(async (resolve, reject)=>{
+    try
+    {
+      let albums;
+      
+      albums = await models.album.find({});
+      
+      resolve(albums);
+    }
+    catch(err){
+      logger.fatal(err);
+      reject("Unable to fetch data");
+    }
+  });
+};
+
+const getGalleryByAlbum = (name) => {
+  logger.trace("inside get images album data");
+
+  return new Promise(async (resolve, reject)=>{
+    try
+    {
+      let images = [];
+      
+      images = await models.album.findOne({albumName: name}, {images: 1});
+      
+      resolve(images);
+    }
+    catch(err){
+      logger.fatal(err);
+      reject("Unable to fetch data");
+    }
+  });
+}
+
 
 module.exports = {
   userLogin,
-  getSchoolData
+  getSchoolData,
+  getAlbums,
+  getGalleryByAlbum
 };

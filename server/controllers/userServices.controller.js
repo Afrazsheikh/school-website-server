@@ -38,7 +38,34 @@ const getSchoolData = (req,res,next)=>{
   });
 }
 
+const getAlbums = (req,res,next)=>{
+
+  logger.trace("inside albums controller");
+
+  userService.getAlbums().then(data=>{
+    res.status(200).json({success: true, albums: data});
+  })
+  .catch(err => {
+	  logger.trace(err);
+    res.status(400).json({success: false, message: err});
+  });
+}
+
+const getGalleryByAlbum = (req,res,next) => {
+  logger.trace("inside images albums controller");
+
+  userService.getGalleryByAlbum(req.params.id).then(data=>{
+    res.status(200).json({success: true, data: data});
+  })
+  .catch(err => {
+	  logger.trace(err);
+    res.status(400).json({success: false, message: err});
+  });
+}
+
 module.exports = {
   userLogin,
-  getSchoolData
+  getSchoolData,
+  getAlbums,
+  getGalleryByAlbum
 };
