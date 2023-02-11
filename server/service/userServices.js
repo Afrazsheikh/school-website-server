@@ -104,10 +104,36 @@ const getGalleryByAlbum = (name) => {
   });
 }
 
+const getNewsById = (schoolId, id) => {
+  logger.trace("inside get news data");
+
+  return new Promise(async (resolve, reject)=>{
+    try
+    {
+      let newsData = [];
+      
+      newsData = await models.school.findOne({_id: schoolId, "section5._id": id}, {section5: 1});
+
+      let index = newsData.section5.findIndex(news => news._id == id);
+      if(index != -1) {
+        resolve(newsData.section5[index]);
+      }
+      else {
+        resolve({});
+      }
+    }
+    catch(err){
+      logger.fatal(err);
+      reject("Unable to fetch data");
+    }
+  });
+}
+
 
 module.exports = {
   userLogin,
   getSchoolData,
   getAlbums,
-  getGalleryByAlbum
+  getGalleryByAlbum,
+  getNewsById
 };

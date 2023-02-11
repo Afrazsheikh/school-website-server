@@ -63,9 +63,22 @@ const getGalleryByAlbum = (req,res,next) => {
   });
 }
 
+const getNewsById = (req,res,next) => {
+  logger.trace("inside news data controller");
+
+  userService.getNewsById(req.params.id, req.query.id).then(data=>{
+    res.status(200).json({success: true, data: data});
+  })
+  .catch(err => {
+	  logger.trace(err);
+    res.status(400).json({success: false, message: err});
+  });
+}
+
 module.exports = {
   userLogin,
   getSchoolData,
   getAlbums,
-  getGalleryByAlbum
+  getGalleryByAlbum,
+  getNewsById
 };

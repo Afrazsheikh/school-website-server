@@ -465,9 +465,14 @@ const updateAboutUs = (req, res) => {
             }
         }
        
-        else {
+        else if(req.body.imgType == "img3") {
             param = {
                 "aboutUs.img3": req.body.imgFile
+            }
+        }
+        else {
+            param = {
+                "aboutUs.img4": req.body.imgFile
             }
         }
     }
@@ -481,6 +486,8 @@ const updateAboutUs = (req, res) => {
             "aboutUs.desc2": req.body.desc2,
             "aboutUs.title3": req.body.title3,
             "aboutUs.desc3": req.body.desc3,
+            "aboutUs.title4": req.body.title4,
+            "aboutUs.desc4": req.body.desc4,
          
         }
     }
