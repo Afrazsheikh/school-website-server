@@ -2,15 +2,11 @@ const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const forms =new Schema ({
-
-    enquiry : 
-    { 
-    name:{type:string},
-    email:{type:string},
-    phoneNumber:{type:string},
-    message:{type:string}
-
-},
+    
+    name:{type:String},
+    email:{type:String},
+    phoneNumber:{type:String},
+    message:{type:String}
 
 },
 {

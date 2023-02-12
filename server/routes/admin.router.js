@@ -58,7 +58,7 @@ router.route('/addDocument').post(authorize, uploads.uploadDoc.single('file'), a
 
 //add enquiry
 
-router.route('/getEnquiry').get(authorize, adminController.getEnquiry);
+
 
 
 //feedback

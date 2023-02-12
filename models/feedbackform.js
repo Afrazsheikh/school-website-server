@@ -4,13 +4,10 @@ const Schema = mongoose.Schema;
 
 const Feedback =new Schema ({
 
-  
-feedback:{
-    name:{type:string},
-    email:{type:string},
-    phoneNumber:{type:string},
-    message:{type:string}
-}
+    name:{type:String},
+    email:{type:String},
+    phoneNumber:{type:String},
+    message:{type:String}
 },
 {
     timestamps: true

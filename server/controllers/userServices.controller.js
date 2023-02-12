@@ -103,16 +103,15 @@ const addEnquiry = (req, res) => {
 
 const addFeedback = (req, res) => {
   logger.trace("inside addEnquiry  controller");
-  let param = {};
-
-      param = {
+  
+  param = {
       
-          "feedback.name": req.body.name,
-          "feedback.email": req.body.email,
-          "feedback.phoneNumber": req.body.phoneNumber,
-          "feedback.message": req.body.message,
-       
-      }
+    "feedback.name": req.body.name,
+    "feedback.email": req.body.email,
+    "feedback.phoneNumber": req.body.phoneNumber,
+    "feedback.message": req.body.message,
+ 
+}
 
 
       userService.addFeedback(req.payload, param).then(async (resp)=>{
@@ -124,6 +123,17 @@ const addFeedback = (req, res) => {
   });
 }
 
+const getEnquiry = (req, res) => {
+  logger.trace("inside getEnquiry   controller");
+
+  userService.getEnquiry().then(async (resp)=>{
+      res.status(200).json({success: true, data: resp});
+  })
+  .catch(err=>{
+      logger.fatal(err);
+      res.status(err.code?err.code:404).json({success: false, message: err.message});
+  });
+}
 
 
 
@@ -134,5 +144,6 @@ module.exports = {
   getGalleryByAlbum,
   getNewsById,
   addEnquiry,
-  addFeedback
+  addFeedback,
+  getEnquiry
 };

@@ -13,5 +13,6 @@ router.route('/getGalleryByAlbum/:id').get(controller.getGalleryByAlbum);
 router.route('/getNewsById/:id').get(controller.getNewsById);
 router.route('/addEnquiry').post(controller.addEnquiry);
 router.route('/addfeedback').post(controller.addFeedback);
+router.route('/getEnquiry').get( controller.getEnquiry);
 module.exports = router;
 
