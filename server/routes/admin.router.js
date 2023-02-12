@@ -56,5 +56,16 @@ router.route('/deleteAlbum/:id').delete(authorize, adminController.deleteAlbum);
 router.route('/addDocument').post(authorize, uploads.uploadDoc.single('file'), adminController.addDocument);
 
 
+//add enquiry
+
+router.route('/getEnquiry').get(authorize, adminController.getEnquiry);
+
+
+//feedback
+
+router.route('/getFeedback').get(authorize, adminController.getFeedback);
+
+
+
 module.exports = router;
 

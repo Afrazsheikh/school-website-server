@@ -75,10 +75,64 @@ const getNewsById = (req,res,next) => {
   });
 }
 
+//enquiry form
+
+const addEnquiry = (req, res) => {
+  logger.trace("inside addEnquiry  controller");
+  let param = {};
+
+      param = {
+      
+          "enquiry.name": req.body.name,
+          "enquiry.email": req.body.email,
+          "enquiry.phoneNumber": req.body.phoneNumber,
+          "enquiry.message": req.body.message,
+       
+      }
+
+
+      userService.addEnquiry(req.payload, param).then(async (resp)=>{
+      res.status(200).json({success: true, message: resp});
+  })
+  .catch(err=>{
+      logger.fatal(err);
+      res.status(err.code?err.code:404).json({success: false, message: err.message});
+  });
+}
+//add  feedback\//enquiry form
+
+const addFeedback = (req, res) => {
+  logger.trace("inside addEnquiry  controller");
+  let param = {};
+
+      param = {
+      
+          "feedback.name": req.body.name,
+          "feedback.email": req.body.email,
+          "feedback.phoneNumber": req.body.phoneNumber,
+          "feedback.message": req.body.message,
+       
+      }
+
+
+      userService.addFeedback(req.payload, param).then(async (resp)=>{
+      res.status(200).json({success: true, message: resp});
+  })
+  .catch(err=>{
+      logger.fatal(err);
+      res.status(err.code?err.code:404).json({success: false, message: err.message});
+  });
+}
+
+
+
+
 module.exports = {
   userLogin,
   getSchoolData,
   getAlbums,
   getGalleryByAlbum,
-  getNewsById
+  getNewsById,
+  addEnquiry,
+  addFeedback
 };

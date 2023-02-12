@@ -729,6 +729,37 @@ const addDocument = (id, docType, docFile, originalFile) => {
 	})
 }
 
+//get enquiry
+const getEnquiry = () => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside getEnquiry service");
+            let enquiry = await models.form.find({});            
+            return resolve(enquiry);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
+
+//get enquiry
+const getFeedback = () => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {
+            logger.trace("inside getEnquiry service");
+            let enquiry = await models.feedbackForm.find({});            
+            return resolve(enquiry);
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code: 400, message: err.message });
+		}
+	})
+}
 
 module.exports  = {
     addLogo,
@@ -759,5 +790,12 @@ module.exports  = {
     addAlbum,
     deleteAlbum,
 
-    addDocument
+    addDocument,
+
+
+    getEnquiry,
+   
+    getFeedback
+
+
 }

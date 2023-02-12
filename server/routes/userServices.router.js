@@ -11,6 +11,7 @@ router.route('/getSchoolData/:id').get(controller.getSchoolData);
 router.route('/getAlbums').get(controller.getAlbums);
 router.route('/getGalleryByAlbum/:id').get(controller.getGalleryByAlbum);
 router.route('/getNewsById/:id').get(controller.getNewsById);
-
+router.route('/addEnquiry').post(controller.addEnquiry);
+router.route('/addfeedback').post(controller.addFeedback);
 module.exports = router;
 

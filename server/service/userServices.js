@@ -130,10 +130,50 @@ const getNewsById = (schoolId, id) => {
 }
 
 
+
+//add enquiry form
+const addEnquiry = (param) => {
+  return new Promise(async (resolve, reject) => {
+      try 
+      {   
+          let sec = await models.forms.update(
+           
+              {$set: param});    
+         
+          return resolve("Student addEnquiry updated successfully");   
+      }
+      catch (err) {
+          logger.fatal(err);
+          reject({ code:400, message: err.message });
+  }
+})
+}
+// feedback
+
+const addFeedback = (param) => {
+  return new Promise(async (resolve, reject) => {
+      try 
+      {   
+          let sec = await models.Feedback.updateOne(
+           
+              {$set: param});    
+         
+          return resolve(" addFeedback updated successfully");   
+      }
+      catch (err) {
+          logger.fatal(err);
+          reject({ code:400, message: err.message });
+  }
+})
+}
+
+
 module.exports = {
   userLogin,
   getSchoolData,
   getAlbums,
   getGalleryByAlbum,
-  getNewsById
+  getNewsById,
+  addEnquiry,
+  addFeedback
 };
