@@ -81,17 +81,17 @@ const addEnquiry = (req, res) => {
   logger.trace("inside addEnquiry  controller");
   let param = {};
 
-      param = {
+      /* param = {
       
-          "enquiry.name": req.body.name,
-          "enquiry.email": req.body.email,
-          "enquiry.phoneNumber": req.body.phoneNumber,
-          "enquiry.message": req.body.message,
+          "name": req.body.name,
+          "email": req.body.email,
+          "phoneNumber": req.body.phoneNumber,
+          "message": req.body.message,
        
-      }
+      } */
 
 
-      userService.addEnquiry(req.payload, param).then(async (resp)=>{
+      userService.addEnquiry(req.body).then(async (resp)=>{
       res.status(200).json({success: true, message: resp});
   })
   .catch(err=>{
@@ -102,19 +102,15 @@ const addEnquiry = (req, res) => {
 //add  feedback\//enquiry form
 
 const addFeedback = (req, res) => {
-  logger.trace("inside addEnquiry  controller");
+  logger.trace("inside addFeedback  controller");
   
   param = {
-      
-    "feedback.name": req.body.name,
-    "feedback.email": req.body.email,
-    "feedback.phoneNumber": req.body.phoneNumber,
-    "feedback.message": req.body.message,
+    
  
 }
 
 
-      userService.addFeedback(req.payload, param).then(async (resp)=>{
+      userService.addFeedback(req.body).then(async (resp)=>{
       res.status(200).json({success: true, message: resp});
   })
   .catch(err=>{
@@ -134,6 +130,19 @@ const getEnquiry = (req, res) => {
       res.status(err.code?err.code:404).json({success: false, message: err.message});
   });
 }
+// get Enquiry
+const getFeedback = (req, res) => {
+  logger.trace("inside getEnquiry   controller");
+
+  userService.getFeedback().then(async (resp)=>{
+      res.status(200).json({success: true, data: resp});
+  })
+  .catch(err=>{
+      logger.fatal(err);
+      res.status(err.code?err.code:404).json({success: false, message: err.message});
+  });
+}
+
 
 
 
@@ -145,5 +154,7 @@ module.exports = {
   getNewsById,
   addEnquiry,
   addFeedback,
-  getEnquiry
+  getEnquiry,
+  getFeedback
+  
 };

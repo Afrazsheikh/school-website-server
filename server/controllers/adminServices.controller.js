@@ -559,19 +559,6 @@ const addDocument = (req, res, next) => {
 
 
 
-// get Enquiry
-const getFeedback = (req, res) => {
-    logger.trace("inside getEnquiry   controller");
-
-    adminService.getFeedback().then(async (resp)=>{
-        res.status(200).json({success: true, data: resp});
-    })
-    .catch(err=>{
-        logger.fatal(err);
-        res.status(err.code?err.code:404).json({success: false, message: err.message});
-    });
-}
- 
 
 
 module.exports = {
@@ -611,6 +598,6 @@ module.exports = {
     
 
   
-    getFeedback
+    
     
 }

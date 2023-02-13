@@ -80,7 +80,7 @@ const addSection = (id, section, secData) => {
     return new Promise(async (resolve, reject) => {
         try 
         { 
-            if(section == "section1" || section == "section4" ||  section == "section5" || section == "galleries")
+            if(section == "section1" || section == "section4" ||  section == "section5" || section == "section6")
             {   
                 let sec = await models.school.updateOne(
                     {_id: id},
@@ -731,21 +731,7 @@ const addDocument = (id, docType, docFile, originalFile) => {
 
 
 
-//get enquiry
-const getFeedback = () => {
-    return new Promise(async (resolve, reject) => {
-        try 
-        {
-            logger.trace("inside getEnquiry service");
-            let enquiry = await models.feedbackForm.find({});            
-            return resolve(enquiry);
-        }
-        catch (err) {
-            logger.fatal(err);
-            reject({ code: 400, message: err.message });
-		}
-	})
-}
+
 
 module.exports  = {
     addLogo,
@@ -780,7 +766,7 @@ module.exports  = {
 
 
 
-    getFeedback
+    
 
 
 }

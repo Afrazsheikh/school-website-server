@@ -14,5 +14,6 @@ router.route('/getNewsById/:id').get(controller.getNewsById);
 router.route('/addEnquiry').post(controller.addEnquiry);
 router.route('/addfeedback').post(controller.addFeedback);
 router.route('/getEnquiry').get( controller.getEnquiry);
+router.route('/getFeedback').get( controller.getFeedback);
 module.exports = router;
 

@@ -13,6 +13,6 @@ const forms =new Schema ({
     timestamps: true
 }); 
 
-const form = mongoose.model("form", forms);
+const form = mongoose.model("forms", forms);
 
 module.exports = form;

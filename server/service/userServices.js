@@ -136,9 +136,8 @@ const addEnquiry = (param) => {
   return new Promise(async (resolve, reject) => {
       try 
       {   
-          let sec = await models.form.insertMany(
-           
-              param);    
+          let sec = await models.form.insertMany(param);   
+          console.log("sec", sec) 
          
           return resolve("Student addEnquiry updated successfully");   
       }
@@ -156,7 +155,7 @@ const addFeedback = (param) => {
       {   
           let sec = await models.feedbackForm.insertMany(
            
-              {$set: param});    
+            param);    
          
           return resolve(" addFeedback updated successfully");   
       }
@@ -172,7 +171,24 @@ const getEnquiry = () => {
       try 
       {
           logger.trace("inside getEnquiry service");
-          let enquiry = await models.form.find({});            
+          let enquiry = await models.form.find();     
+          console.log("enquiry",enquiry)       
+          return resolve(enquiry);
+      }
+      catch (err) {
+          logger.fatal(err);
+          reject({ code: 400, message: err.message });
+  }
+})
+}
+
+//get enquiry
+const getFeedback = () => {
+  return new Promise(async (resolve, reject) => {
+      try 
+      {
+          logger.trace("inside getEnquiry service");
+          let enquiry = await models.feedbackForm.find({});            
           return resolve(enquiry);
       }
       catch (err) {
@@ -190,5 +206,5 @@ module.exports = {
   getGalleryByAlbum,
   getNewsById,
   addEnquiry,
-  addFeedback,getEnquiry
+  addFeedback,getEnquiry,getFeedback
 };

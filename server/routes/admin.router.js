@@ -63,7 +63,7 @@ router.route('/addDocument').post(authorize, uploads.uploadDoc.single('file'), a
 
 //feedback
 
-router.route('/getFeedback').get(authorize, adminController.getFeedback);
+
 
 
 
