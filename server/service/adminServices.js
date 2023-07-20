@@ -614,6 +614,7 @@ const updateStudData = (id, param) => {
 	})
 }
 const updateAboutUs = (id, param) => {
+  console.log("id=================>", id, param, 'param================');
     return new Promise(async (resolve, reject) => {
         try 
         {   
@@ -729,6 +730,31 @@ const addDocument = (id, docType, docFile, originalFile) => {
 	})
 }
 
+// const addFacility = async (facilityData) => {
+//     try {
+//       const newFacility = new FacilityAdd(facilityData);
+//       const savedFacility = await newFacility.save();
+//       return savedFacility;
+//     } catch (error) {
+//       throw error;
+//     }
+//   };
+  const addFacility = (id, param) => {
+    return new Promise(async (resolve, reject) => {
+        try 
+        {   
+            let sec = await models.school.findOneAndUpdate(
+                {_id: id},
+                {$set: param});    
+           
+            return resolve("Facility updated successfully");   
+        }
+        catch (err) {
+            logger.fatal(err);
+            reject({ code:400, message: err.message });
+		}
+	})
+}
 
 
 
@@ -763,6 +789,7 @@ module.exports  = {
     deleteAlbum,
 
     addDocument,
+    addFacility
 
 
 

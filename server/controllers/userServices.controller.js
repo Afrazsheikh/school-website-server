@@ -62,7 +62,7 @@ const getGalleryByAlbum = (req,res,next) => {
     res.status(400).json({success: false, message: err});
   });
 }
-
+//get
 const getNewsById = (req,res,next) => {
   logger.trace("inside news data controller");
 

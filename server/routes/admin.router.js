@@ -60,6 +60,7 @@ router.route('/addDocument').post(authorize, uploads.uploadDoc.single('file'), a
 
 
 
+router.route('/addfacility').post(authorize, uploads.uploadSection2Img.single('file'), adminController.addFacility);
 
 //feedback
 

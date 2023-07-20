@@ -292,7 +292,8 @@ const deleteSec6Slide = (req,res,next)=>{
     });
 }
 
-const getGalleries = (req, res) => {
+const 
+getGalleries = (req, res) => {
     logger.info("inside  get Gallery controller");
     adminService.getGalleries(req.query.album).then(async (data)=>{
         res.status(200).json({success:true, data: data});
@@ -554,12 +555,199 @@ const addDocument = (req, res, next) => {
 }
 
 
-// get Enquiry
+// add facility 
+
+// const addFacility = (req, res) => {
+//     logger.trace("inside add album  controller");
+
+//     adminService.addFacility(req.body).then(async (resp)=>{
+//         res.status(200).json({success: true, message: resp});
+//     })
+//     .catch(err=>{
+//         logger.fatal(err);
+//         res.status(err.code?err.code:404).json({success: false, message: err.message});
+//     });
+// }
+//update  About us
+const addFacility = (req, res) => {
+    logger.trace("inside update career controller");
+    let param = {};
+
+    if(req.body.imgType) {
+        if(req.body.imgType == "imgF1") {
+            param = {
+                "facility.imgF1": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "imgF2") {
+            param = {
+                "facility.imgF2": req.body.imgFile
+            }
+        }
+       
+        else if(req.body.imgType == "imgF3") {
+            param = {
+                "facility.imgF3": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "imgF4") {
+            param = {
+                "facility.imgF4": req.body.imgFile
+            }
+        }
+        else if(req.body.imgType == "imgF5") {
+            param = {
+                "facility.imgF5": req.body.imgFile
+            }
+        }
+     
+      
+        else  {
+            param = {
+                "facility.imgF6": req.body.imgFile
+            }
+        }
+    }
+    else 
+    {
+        param = {
+            "facility.mainTitle": req.body.mainTitle,
+            "facility.mainDesc": req.body.mainDesc,
+            "facility.titleLeft": req.body.titleLeft,
+            "facility.titleRight": req.body.titleRight,
+
+            "facility.titleSubRight1": req.body.titleSubRight1,
+            "facility.titleSubRight2": req.body.titleSubRight2,
+            "facility.titleSubRight3": req.body.titleSubRight3,
+            "facility.titleSubRight4": req.body.titleSubRight4,
+            "facility.titleSubRight5": req.body.titleSubRight5,
+
+
+
+            "facility.titleSubLeft1": req.body.titleSubLeft1,
+            "facility.titleSubLeft2": req.body.titleSubLeft2,
+            "facility.titleSubLeft3": req.body.titleSubLeft3,
+            "facility.titleSubLeft4": req.body.titleSubLeft4,
+            "facility.titleSubLeft15": req.body.titleSubLeft5,
+
+
+            "facility.summaryL1": req.body.summaryL1,
+            "facility.summaryL2": req.body.summaryL2,
+            "facility.summaryL3": req.body.summaryL3,
+            "facility.summaryL4": req.body.summaryL4,
+            "facility.summaryL5": req.body.summaryL5,
+
+            "facility.desc1": req.body.desc1,
+            "facility.desc2": req.body.desc2,
+            "facility.desc3": req.body.desc3,
+            "facility.desc4": req.body.desc4,
+            "facility.desc5": req.body.desc5,
+
+
+    
+
+
+            "facility.titleSubRight1": req.body.titleSubRight1,
+            "facility.summaryR1": req.body.summaryR1,
+            
+
+
+            // "aboutUs.desc2": req.body.desc2,
+            // "aboutUs.title3": req.body.title3,
+            // "aboutUs.desc3": req.body.desc3,
+            // "aboutUs.title4": req.body.title4,
+            // "aboutUs.desc4": req.body.desc4,
+         
+        }
+    }
+
+    adminService.addFacility(req.payload.schoolId, param).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+// add NewsMenu
 
 
 
 
+const addNewsMenu = (req, res) => {
+    logger.trace("inside add album  controller");
 
+    adminService.addNewsMenu(req.body).then(async (resp)=>{
+        res.status(200).json({success: true, message: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+const getNewsMenu = (req, res) => {
+    logger.trace("inside get getNewsMenu  controller");
+
+    adminService.getNewsMenu().then(async (resp)=>{
+        res.status(200).json({success: true, data: resp});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+const deleteNewsMenu = (req, res) => {
+    let album = req.params.id;
+    logger.trace("inside  delete Album controller");
+    adminService.deleteNewsMenu(newsMenuAdd).then(async (data)=>{
+        res.status(200).json({success:true, message: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+
+
+const addNewsMenuDetails = (req, res) => {
+    logger.info("inside addNewsMenuDetails controller");
+    adminService.addNewsMenuDetails(req.body.newsMenuAdd, req.body.newsMenuDetails).then(async (data)=>{
+        if(req.body.newsMenuDetails) {
+            req.body.newsMenuDetails.length = 0;
+        }
+        res.status(200).json({success:true, message: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        if(req.body.newsMenuDetails) {
+            req.body.newsMenuDetails.length = 0;
+        }
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+getNewsMenuDetails = (req, res) => {
+    logger.info("inside  get Gallery controller");
+    adminService.getNewsMenuDetails(req.query.newsMenuAdd).then(async (data)=>{
+        res.status(200).json({success:true, data: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
+const deleteNewsMenuDetails = (req,res,next)=>{
+    let album = req.params.id;
+    logger.trace("inside   controller");
+    adminService.deleteNewsMenuDetails(album, req.query.fileId).then(async (data)=>{
+        res.status(200).json({success:true, message: data});
+    })
+    .catch(err=>{
+        logger.fatal(err);
+        return res.status(err.code?err.code:404).json({success: false, message: err.message});
+    });
+}
 
 module.exports = {
     addLogo,
@@ -595,9 +783,15 @@ module.exports = {
 
     addDocument,
 
-    
+    addNewsMenu,
+    getNewsMenu,
+    deleteNewsMenu,
 
-  
+    addNewsMenuDetails,
+    getNewsMenuDetails,
+    deleteNewsMenuDetails,
+    
+    addFacility
     
     
 }

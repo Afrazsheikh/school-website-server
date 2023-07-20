@@ -137,6 +137,49 @@ const school =new Schema ({
         /* trustDoc: {type: String},
         trustDoc: {type: String},
         trustDoc: {type: String}, */
+    },
+    facility: { 
+        imgF1: {type: String},
+        imgF2: {type: String},
+        imgF3: {type: String},
+        imgF4: {type: String},
+        imgF5: {type: String},
+        imgF6: {type: String},
+     
+
+        mainTitle: {type:String}, 
+        mainDesc: {type:String}, 
+        titleLeft: {type:String}, 
+        titleRight: {type:String}, 
+        titleSubLeft1: {type:String}, 
+        summaryL1: {type:String}, 
+        titleSubRight1: {type:String}, 
+        titleSubLeft2: {type:String}, 
+        titleSubLeft3: {type:String}, 
+        titleSubLeft4: {type:String}, 
+        titleSubLeft5: {type:String}, 
+        titleSubRight2: {type:String}, 
+        titleSubRight3: {type:String}, 
+        titleSubRight4: {type:String}, 
+        titleSubRight5: {type:String}, 
+          summaryL2: {type:String}, 
+          summaryL3: {type:String}, 
+          summaryL4: {type:String}, 
+          summaryL5: {type:String}, 
+          desc1: {type:String}, 
+          desc2: {type:String}, 
+          desc3: {type:String}, 
+          desc4: {type:String}, 
+          desc5: {type:String}, 
+         
+
+
+     
+
+     
+
+
+
     }
 },
 {

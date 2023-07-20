@@ -199,6 +199,8 @@ const getFeedback = () => {
 }
 
 
+
+
 module.exports = {
   userLogin,
   getSchoolData,
@@ -207,4 +209,6 @@ module.exports = {
   getNewsById,
   addEnquiry,
   addFeedback,getEnquiry,getFeedback
+
+  
 };
