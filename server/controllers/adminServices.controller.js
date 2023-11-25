@@ -600,6 +600,11 @@ const addFacility = (req, res) => {
                 "facility.imgF5": req.body.imgFile
             }
         }
+        else if(req.body.imgType == "imgFNew") {
+            param = {
+                "facility.imgFNew": req.body.imgFile
+            }
+        }
      
       
         else  {

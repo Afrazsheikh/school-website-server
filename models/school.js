@@ -145,6 +145,8 @@ const school =new Schema ({
         imgF4: {type: String},
         imgF5: {type: String},
         imgF6: {type: String},
+        imgFNew: {type: String},
+
      
 
         mainTitle: {type:String}, 
